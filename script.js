@@ -3,8 +3,8 @@ let port;
 const updateTitle = message => {
   const el = document.getElementById('firstHeading');
   el.innerHTML = "";
-  for (let token of message) {
-    el.innerHTML += `<ruby>${token[0]}<rp>(</rp><rt>${token[1]}</rt><rp>)</rp></ruby> `;
+  for (let [token, phonetic] of message) {
+    el.innerHTML += `<ruby>${token}<rp>(</rp><rt>${phonetic}</rt><rp>)</rp></ruby> `;
   }
 }
 
