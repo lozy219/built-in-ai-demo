@@ -1,0 +1,15 @@
+{
+  "name": "IPA Furigana",
+  "description": "Pronounciation assistant",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "sw.js"
+  },
+  "content_scripts": [
+   {
+     "matches": ["http://*/*", "https://*/*"],
+     "js": ["script.js"]
+   }
+ ]
+}
