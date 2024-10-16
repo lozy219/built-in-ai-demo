@@ -39,23 +39,28 @@ const checkAPI = async () => {
   }
   success("`window.ai` is defined.");
 
+  let namespace = "languageModel";
   if (!window.ai.languageModel) {
-    error("`window.ai.languageModel` is **not** defined.");
-    return;
+    error("`window.ai.languageModel` is **not** defined, maybe you're running an older version, let's try `window.ai.assistant`.");
+    if (!window.ai.assistant) {
+      error("`window.ai.assistant` is **not** defined etiher, please make sure [chrome://flags/#prompt-api-for-gemini-nano](chrome://flags/#prompt-api-for-gemini-nano) is enabled.");
+      return;
+    }
+    namespace = "assistant";
   }
-  success("`window.ai.languageModel` is defined.");
+  success(`\`window.ai.${namespace}\` is defined.`);
 
-  info("calling `window.ai.languageModel.capabilities()`...");
-  const capabilities = await window.ai.languageModel.capabilities();
+  info(`calling \`window.ai.${namespace}.capabilities()\`...`);
+  const capabilities = await window.ai[namespace].capabilities();
   let method = capabilities.available === "no" ? error : success;
   method(`\`capabilities\` is \`${capabilities.available}\`.`);
 
-  info("calling `window.ai.languageModel.create()`...");
+  info(`calling \`window.ai.${namespace}.create()\`...`);
   let session;
   try {
-    session = await ai.languageModel.create();
+    session = await ai[namespace].create();
   } catch (e) {
-    error(`failed to create an \`AILanguageModel\`, the exception is \`${e}\`.`);
+    error(`failed to create an ${namespace === "languageModel" ? "`AILanguageModel`" : "`AIAssistant`"}, the exception is \`${e}\`.`);
     return;
   }
   testSession(session);
